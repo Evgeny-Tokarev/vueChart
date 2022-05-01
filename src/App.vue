@@ -1,9 +1,9 @@
+<template>
+  <Highcharts />
+</template>
+
 <script setup lang="ts">
-// import { RouterLink, RouterView } from "vue-router";
+import Highcharts from "@/views/Highcharts.vue";
 </script>
 
-<template></template>
-
-<style>
-/* @import "@/assets/base.css"; */
-</style>
+<style></style>
