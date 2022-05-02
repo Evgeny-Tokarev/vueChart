@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import * as Highcharts from "highcharts";
 import { onMounted } from "vue";
+import makeRequest from "@/components/vkRequests";
 
 function graph() {
   const chart = Highcharts.chart({
@@ -35,15 +36,11 @@ function graph() {
 }
 onMounted(() => {
   graph();
+  makeRequest();
 });
 </script>
 
 <template>
-  <div id="nav">
-    <router-link to="/Information">Information</router-link> |
-    <router-link to="/Registration">Registration</router-link> |
-    <router-link to="/Subscribers">Subscribers</router-link>
-  </div>
   <div id="graph"></div>
   <div class="locale">{{ $t("hello") }}</div>
   <button @click="$i18n.locale = 'ja'">change language</button>
