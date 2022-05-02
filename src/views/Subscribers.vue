@@ -39,6 +39,11 @@ onMounted(() => {
 </script>
 
 <template>
+  <div id="nav">
+    <router-link to="/Information">Information</router-link> |
+    <router-link to="/Registration">Registration</router-link> |
+    <router-link to="/Subscribers">Subscribers</router-link>
+  </div>
   <div id="graph"></div>
   <div class="locale">{{ $t("hello") }}</div>
   <button @click="$i18n.locale = 'ja'">change language</button>
