@@ -6,6 +6,9 @@ import makeRequest from "@/components/vkRequests";
 const state = reactive({
   group: {},
   subscribersCount: 0,
+  isUpdated: false,
+  avatarUrl: "",
+  groupName: "",
 });
 function graph() {
   Highcharts.chart({
@@ -31,7 +34,7 @@ function graph() {
     },
 
     title: {
-      text: `Subscribers in the group ${state.subscribersCount}`,
+      text: `${state.subscribersCount}`,
     },
 
     xAxis: {
@@ -92,24 +95,31 @@ let interval: number;
 onMounted(() => {
   interval = window.setInterval(() => setsubscribersCount(), 1000);
   function setsubscribersCount() {
-    makeRequest().then((group) => {
-      state.subscribersCount = group?.response.count || 0;
+    makeRequest().then((groups) => {
+      const group = groups?.response[0];
+      state.subscribersCount = group?.members_count || 0;
+      state.avatarUrl = group?.photo_200;
+      state.groupName = group?.name;
+      state.isUpdated = true;
     });
   }
-  graph();
 });
-// watch(
-//   () => state.subscribersCount,
-//   () => {
-//     graph();
-//   }
-// );
+
+watch(
+  () => state.isUpdated,
+  () => {
+    console.log(state.subscribersCount);
+    graph();
+  }
+);
 onBeforeUnmount(() => {
   window.clearInterval(interval);
 });
 </script>
 
 <template>
+  <h2>{{ state.groupName }}</h2>
+  <img :src="state.avatarUrl" alt="avatar" />
   <div id="graph"></div>
   <div class="locale">{{ $t("hello") }}</div>
   <button @click="$i18n.locale = 'ja'">change language</button>
