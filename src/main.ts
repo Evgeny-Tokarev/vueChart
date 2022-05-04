@@ -4,7 +4,7 @@ import App from "./App.vue";
 import "@/assets/base.css";
 import { createI18n } from "vue-i18n";
 import router from "@/router/index";
-import { VueJsonp } from "vue-jsonp";
+
 
 const i18n = createI18n({
   allowComposition: true,
@@ -19,7 +19,6 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 app.use(i18n);
-app.use(VueJsonp);
 app.mount("#app");
 console.log(i18n.global.locale);
 
