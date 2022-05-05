@@ -3,7 +3,10 @@ import * as Highcharts from "highcharts";
 import { onMounted, reactive, onBeforeUnmount, watch } from "vue";
 import makeRequest from "@/components/vkRequests";
 
-const state = reactive({
+interface State {
+  [key: string]: any;
+}
+const state: State = reactive({
   group: {},
   subscribersCount: 0,
   isUpdated: false,
@@ -11,17 +14,16 @@ const state = reactive({
   groupName: "",
 });
 function graph() {
-  Highcharts.chart({
+  state.chart = Highcharts.chart({
     chart: {
       renderTo: "graph",
       type: "spline",
       marginRight: 10,
       events: {
         load: function () {
-          // set up the updating of the chart each second
           var series = this.series[0];
           setInterval(function () {
-            var x = new Date().getTime(), // current time
+            var x = new Date().getTime(),
               y = state.subscribersCount;
             series.addPoint([x, y], true, true);
           }, 1000);
@@ -34,33 +36,20 @@ function graph() {
     },
 
     title: {
-      text: `${state.subscribersCount}`,
+      text: "",
     },
 
     xAxis: {
       type: "datetime",
-      tickPixelInterval: 150,
+      tickPixelInterval: 50,
     },
 
     yAxis: {
-      // max: state.subscribersCount + 100,
-      // min: state.subscribersCount - 100,
       title: {
         text: "Subscribers",
       },
-      plotLines: [
-        {
-          value: 0,
-          width: 1,
-          color: "#808080",
-        },
-      ],
+      tickInterval: 1,
     },
-
-    // tooltip: {
-    //   headerFormat: "<b>{series.name}</b><br/>",
-    //   pointFormat: "{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}",
-    // },
 
     legend: {
       enabled: false,
@@ -93,14 +82,22 @@ function graph() {
 }
 let interval: number;
 onMounted(() => {
+  let tries = 0;
   interval = window.setInterval(() => setsubscribersCount(), 1000);
   function setsubscribersCount() {
     makeRequest().then((groups) => {
-      const group = groups?.response[0];
-      state.subscribersCount = group?.members_count || 0;
-      state.avatarUrl = group?.photo_200;
-      state.groupName = group?.name;
-      state.isUpdated = true;
+      if (groups && groups.response) {
+        const group = groups.response[0];
+        state.subscribersCount = group.members_count;
+        state.avatarUrl = group.photo_200;
+        state.groupName = group.name;
+        state.isUpdated = true;
+      } else {
+        tries++;
+        if (tries > 10) {
+          window.clearInterval(interval);
+        }
+      }
     });
   }
 });
@@ -108,8 +105,22 @@ onMounted(() => {
 watch(
   () => state.isUpdated,
   () => {
-    console.log(state.subscribersCount);
     graph();
+    state.chart.yAxis[0].setExtremes(
+      state.subscribersCount - 10,
+      state.subscribersCount + 10
+    );
+  }
+);
+watch(
+  () => state.subscribersCount,
+  () => {
+    if (!!state.chart) {
+      state.chart.yAxis[0].setExtremes(
+        state.subscribersCount - 10,
+        state.subscribersCount + 10
+      );
+    }
   }
 );
 onBeforeUnmount(() => {
@@ -118,16 +129,42 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <h2>{{ state.groupName }}</h2>
-  <img :src="state.avatarUrl" alt="avatar" />
-  <div id="graph"></div>
-  <div class="locale">{{ $t("hello") }}</div>
-  <button @click="$i18n.locale = 'ja'">change language</button>
-  <div class="header">
-    <h3>{{ state.group }}</h3>
+  <div class="group">
+    <h2 class="group__name">{{ state.groupName || "Group" }}</h2>
+    <img
+      class="group__image"
+      :src="state.avatarUrl"
+      alt="avatar"
+      width="200"
+      height="200"
+      v-if="state.avatarUrl.length"
+    />
+    <img
+      class="group__image"
+      v-else
+      src="@/assets/images/group-image.svg"
+      alt="avatar"
+      width="200"
+      height="200"
+    />
+    <div id="graph"></div>
+    <div class="locale">{{ $t("hello") }}</div>
+    <button @click="$i18n.locale = 'ja'">change language</button>
   </div>
 </template>
 
 <style lang="scss" scoped>
-/* @import "@/assets/base.css"; */
+@import "@/assets/base.css";
+
+.group {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  #graph {
+    width: 90%;
+  }
+}
 </style>
