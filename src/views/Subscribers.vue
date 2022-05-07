@@ -2,12 +2,13 @@
 import * as Highcharts from "highcharts";
 import { onMounted, reactive, onBeforeUnmount, watch } from "vue";
 import makeRequest from "@/components/vkRequests";
+import { useStore } from "@/stores/store";
 
 interface State {
   [key: string]: any;
 }
+const group = useStore();
 const state: State = reactive({
-  group: {},
   subscribersCount: 0,
   isUpdated: false,
   avatarUrl: "",
@@ -83,32 +84,22 @@ function graph() {
 let interval: number;
 onMounted(() => {
   let tries = 0;
-  interval = window.setInterval(() => setsubscribersCount(), 1000);
-  function setsubscribersCount() {
-    makeRequest().then((groups) => {
-      if (groups && groups.response) {
-        const group = groups.response[0];
-        state.subscribersCount = group.members_count;
-        state.avatarUrl = group.photo_200;
-        state.groupName = group.name;
-        state.isUpdated = true;
-      } else {
-        tries++;
-        if (tries > 10) {
-          window.clearInterval(interval);
-        }
-      }
-    });
-  }
+  interval = window.setInterval(() => {
+    state.subscribersCount = group.getSubscribersCount || 0;
+    if (state.subscribersCount) {
+      state.avatarUrl = group.getGroupAvatar;
+      state.groupName = group.getGroupName;
+      state.isUpdated = true;
+    }
+  }, 1000);
 });
-
 watch(
   () => state.isUpdated,
   () => {
     graph();
     state.chart.yAxis[0].setExtremes(
-      state.subscribersCount - 10,
-      state.subscribersCount + 10
+      state.subscribersCount - 5,
+      state.subscribersCount + 5
     );
   }
 );
@@ -117,8 +108,8 @@ watch(
   () => {
     if (!!state.chart) {
       state.chart.yAxis[0].setExtremes(
-        state.subscribersCount - 10,
-        state.subscribersCount + 10
+        state.subscribersCount - 5,
+        state.subscribersCount + 5
       );
     }
   }
@@ -135,8 +126,8 @@ onBeforeUnmount(() => {
       class="group__image"
       :src="state.avatarUrl"
       alt="avatar"
-      width="200"
-      height="200"
+      width="50"
+      height="50"
       v-if="state.avatarUrl.length"
     />
     <img
@@ -144,12 +135,10 @@ onBeforeUnmount(() => {
       v-else
       src="@/assets/images/group-image.svg"
       alt="avatar"
-      width="200"
-      height="200"
+      width="100"
+      height="100"
     />
     <div id="graph"></div>
-    <div class="locale">{{ $t("hello") }}</div>
-    <button @click="$i18n.locale = 'ja'">change language</button>
   </div>
 </template>
 
@@ -161,10 +150,16 @@ onBeforeUnmount(() => {
   flex-direction: column;
   text-align: center;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   padding: 1rem;
   #graph {
     width: 90%;
+  }
+  &__image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    box-shadow: 0px 10px 20px 0px rgba(31, 32, 65, 0.2);
   }
 }
 </style>

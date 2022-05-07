@@ -5,7 +5,6 @@ import "@/assets/base.css";
 import { createI18n } from "vue-i18n";
 import router from "@/router/index";
 
-
 const i18n = createI18n({
   allowComposition: true,
   locale: "en",
