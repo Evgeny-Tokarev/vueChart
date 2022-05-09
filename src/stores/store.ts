@@ -1,14 +1,14 @@
-import { defineStore } from "pinia";
-import makeRequest from "@/components/vkRequests";
+import { defineStore, type _DeepPartial } from "pinia";
+import requestVk from "@/components/vkRequests";
 
-interface State {
+interface Group {
   [key: string]: any;
 }
 export const useStore = defineStore({
   id: "groupInfo",
   state: () => {
     return {
-      group: {} as State,
+      group: {} as Group,
     };
   },
   getters: {
@@ -20,11 +20,10 @@ export const useStore = defineStore({
     getGroupUrl: (state) => `https://vk.com/${state.group.screen_name}`,
   },
   actions: {
-    setGroup(groupID: string) {
+    setGroup(groupID: string, groupPassword: string) {
       let tries = 1;
       let interval = window.setInterval(() => {
-        console.log(`${tries}-s try`);
-        makeRequest(groupID).then((groups) => {
+        requestVk(groupID, groupPassword).then((groups) => {
           if (groups && groups.response) {
             this.$patch({
               group: groups.response[0],
@@ -32,7 +31,8 @@ export const useStore = defineStore({
             window.clearInterval(interval);
           } else {
             tries++;
-            if (tries > 10) {
+            if (tries >= 5) {
+              this.$reset();
               window.clearInterval(interval);
             }
           }

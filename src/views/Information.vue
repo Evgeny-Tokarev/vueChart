@@ -4,7 +4,6 @@ import { reactive } from "vue";
 
 const store = useStore();
 const state = reactive({});
-console.log(store.group);
 </script>
 
 <template>
@@ -28,10 +27,10 @@ console.log(store.group);
         height="100"
       />
     </a>
-    <div class="info__subscribers">
+    <div class="info__subscribers" v-if="store.getSubscribersCount">
       {{ store.getSubscribersCount }} members in the group
     </div>
-    <div class="info__isClosed">
+    <div class="info__isClosed" v-if="store.getGroupIsClosed">
       {{ store.getGroupIsClosed ? "The group is Closed" : "The group is Open" }}
     </div>
     <div class="info__description">{{ store.getGroupDescription }}</div>

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import * as Highcharts from "highcharts";
 import { onMounted, reactive, onBeforeUnmount, watch } from "vue";
-import makeRequest from "@/components/vkRequests";
 import { useStore } from "@/stores/store";
 
 interface State {
@@ -59,6 +58,9 @@ function graph() {
     exporting: {
       enabled: false,
     },
+    accessibility: {
+      enabled: false,
+    },
 
     series: [
       {
@@ -90,6 +92,8 @@ onMounted(() => {
       state.avatarUrl = group.getGroupAvatar;
       state.groupName = group.getGroupName;
       state.isUpdated = true;
+    } else {
+      clearInterval(interval);
     }
   }, 1000);
 });
@@ -121,7 +125,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="group">
-    <h2 class="group__name">{{ state.groupName || "Group" }}</h2>
+    <h2 class="group__name" v-if="state.groupName">
+      {{ state.groupName || "Group" }}
+    </h2>
     <img
       class="group__image"
       :src="state.avatarUrl"

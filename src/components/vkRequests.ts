@@ -1,15 +1,16 @@
 import fetchJsonp from "fetch-jsonp";
-export default async function makeRequest(
+export default async function requestVk(
   groupID: string | number = "exclusive_muzic",
   groupKey: string
 ) {
+  console.log(groupID, groupKey);
   try {
     const res = await fetchJsonp(
       `https://api.vk.com/method/groups.getById?group_id=${groupID}&fields=members_count,description&v=5.131&access_token=${groupKey.replace(
         /['"]+/g,
         ""
       )}`,
-      { timeout: 10000 }
+      { timeout: 7000 }
     );
     if (!!res.ok) {
       const body = await res.json();
@@ -20,3 +21,4 @@ export default async function makeRequest(
     return null;
   }
 }
+//= import.meta.env.VITE_GROUP_KEY
