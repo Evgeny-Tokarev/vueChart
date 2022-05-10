@@ -3,15 +3,13 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import "@/assets/base.css";
 import { createI18n } from "vue-i18n";
+import messages from "@/components/locale";
 import router from "@/router/index";
 
 const i18n = createI18n({
   allowComposition: true,
   locale: "en",
-  messages: {
-    en: { hello: "hi there!" },
-    ja: { hello: "こんにちは！" },
-  },
+  messages,
 });
 const app = createApp(App);
 

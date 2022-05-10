@@ -3,16 +3,18 @@
     <span class="locale__description locale__description_type_ru">Ру</span>
     <label class="locale__switcher">
       <input type="checkbox" @click="togleLanguage" />
-      <!-- {{ $t("hello") }} -->
       <span class="locale__checkbox"></span>
     </label>
     <span class="locale__description locale__description_type_en">En</span>
   </div>
 </template>
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
+
 function togleLanguage(e: MouseEvent) {
   const target = e.target as HTMLInputElement;
-  console.log(target.checked);
+  locale.value = target.checked ? "en" : "ru";
 }
 </script>
 <style lang="scss" scoped>

@@ -1,27 +1,30 @@
 <template>
   <div id="menu">
     <nav class="navbar">
-      <router-link class="navbar__link" to="/Information"
-        >Information</router-link
-      >
-      <router-link class="navbar__link" to="/">Registration</router-link>
-      <router-link class="navbar__link" to="/Subscribers"
-        >Subscribers</router-link
-      >
+      <router-link class="navbar__link" to="/Information">{{
+        state.info
+      }}</router-link>
+      <router-link class="navbar__link" to="/">{{ state.reg }}</router-link>
+      <router-link class="navbar__link" to="/Subscribers">{{
+        state.subs
+      }}</router-link>
     </nav>
     <LocaleSwitcher />
   </div>
-
-  <!-- <button @click="$i18n.locale = 'ja'">change language</button> -->
   <router-view></router-view>
 </template>
 
 <script setup lang="ts">
 import LocaleSwitcher from "@/views/LocaleSwitcher.vue";
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const state = reactive({
   group: {},
+  info: computed(() => t("button.info")),
+  subs: computed(() => t("button.subs")),
+  reg: computed(() => t("button.reg")),
 });
 </script>
 
