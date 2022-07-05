@@ -26,10 +26,10 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-// router.beforeEach((to) => {
-//   const store = useStore()
-//   if (!store.hasGroup && to.path !== '/') {
-//       return '/'
-//   }
-// })
+router.beforeEach((to) => {
+  const store = useStore()
+  if (!store.hasGroup && to.path !== '/') {
+      return '/'
+  }
+})
 export default router;
