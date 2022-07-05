@@ -71,5 +71,5 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: url("@/assets/images/pexels-philippe-donn-1242764.jpg") no-repeat center;
-  background-size: contain;
+  background-size: cover;
 }
