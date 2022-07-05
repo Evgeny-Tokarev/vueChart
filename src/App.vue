@@ -40,7 +40,7 @@ const state = reactive({
   .navbar {
     display: flex;
     gap: 1rem;
-    padding: 1rem;   
+    padding: 1rem;
     &__link {
       text-align: center;
       text-decoration: none;
