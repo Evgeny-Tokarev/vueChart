@@ -1,6 +1,6 @@
 <template>
   <div id="menu">
-    <nav v-if="store.hasGroup" class="navbar">
+    <nav class="navbar">
       <router-link class="navbar__link" to="/">{{ state.reg }}</router-link>
       <router-link class="navbar__link" to="/Information">{{
         state.info
