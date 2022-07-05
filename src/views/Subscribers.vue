@@ -61,6 +61,11 @@ function graph() {
     accessibility: {
       enabled: false,
     },
+                plotOptions: {
+                series: {
+                    animation: false
+                }
+            },
 
     series: [
       {
@@ -120,9 +125,6 @@ watch(
     state.chart.yAxis[0].setTitle({ text: state.subscribersText });
   }
 );
-// onBeforeUnmount(() => {
-//   window.clearInterval(interval);
-// });
 </script>
 
 <template>

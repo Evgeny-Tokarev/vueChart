@@ -2,13 +2,13 @@ const messages = {
   en: {
     button: {
       info: "Information",
-      reg: "Registration",
+      reg: "Search",
       subs: "Subscribers",
       search: "search",
     },
     input: {
-      id: "Input group id",
-      key: "Input group key",
+      id: "Enter group id",
+      key: "Enter group key",
     },
     utility: {
       findFail: "Wrong group name or group key",
@@ -25,7 +25,7 @@ const messages = {
   ru: {
     button: {
       info: "Информация",
-      reg: "Регистрация",
+      reg: "Поиск",
       subs: "Подписчики",
       search: "искать",
     },

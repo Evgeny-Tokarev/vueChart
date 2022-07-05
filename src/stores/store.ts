@@ -8,6 +8,7 @@ export const useStore = defineStore({
   id: "groupInfo",
   state: () => {
     return {
+      hasGroup: false,
       group: {} as Group,
     };
   },
@@ -27,8 +28,10 @@ export const useStore = defineStore({
           if (groups && groups.response) {
             this.$reset();
             this.$patch({
+              hasGroup: true,
               group: groups.response[0],
             });
+        
             window.clearInterval(interval);
           } else {
             tries++;
