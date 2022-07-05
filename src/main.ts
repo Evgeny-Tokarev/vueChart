@@ -3,7 +3,7 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import "@/assets/base.css";
 import { createI18n } from "vue-i18n";
-import messages from "@/components/locale";
+import messages from "@/locales/locale";
 import router from "@/router/index";
 
 const i18n = createI18n({
@@ -17,6 +17,3 @@ app.use(createPinia());
 app.use(router);
 app.use(i18n);
 app.mount("#app");
-console.log(i18n.global.locale);
-
-export { i18n };

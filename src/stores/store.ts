@@ -25,6 +25,7 @@ export const useStore = defineStore({
       let interval = window.setInterval(() => {
         requestVk(groupID, groupPassword).then((groups) => {
           if (groups && groups.response) {
+            this.$reset();
             this.$patch({
               group: groups.response[0],
             });

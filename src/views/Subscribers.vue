@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import * as Highcharts from "highcharts";
-import { onMounted, reactive, onBeforeUnmount, watch } from "vue";
+import { onMounted, reactive, onBeforeUnmount, watch, computed } from "vue";
 import { useStore } from "@/stores/store";
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
 
 interface State {
   [key: string]: any;
 }
 const group = useStore();
 const state: State = reactive({
-  subscribersCount: 0,
   isUpdated: false,
-  avatarUrl: "",
-  groupName: "",
+  subscribersText: computed(() => t("chart.subs")),
 });
 function graph() {
   state.chart = Highcharts.chart({
@@ -24,7 +24,7 @@ function graph() {
           var series = this.series[0];
           setInterval(function () {
             var x = new Date().getTime(),
-              y = state.subscribersCount;
+              y = group.getSubscribersCount;
             series.addPoint([x, y], true, true);
           }, 1000);
         },
@@ -46,7 +46,7 @@ function graph() {
 
     yAxis: {
       title: {
-        text: "Subscribers",
+        text: state.subscribersText,
       },
       tickInterval: 1,
     },
@@ -74,7 +74,7 @@ function graph() {
           for (i = -19; i <= 0; i += 1) {
             data.push({
               x: time + i * 1000,
-              y: state.subscribersCount,
+              y: group.getSubscribersCount,
             });
           }
           return data;
@@ -85,12 +85,8 @@ function graph() {
 }
 let interval: number;
 onMounted(() => {
-  let tries = 0;
   interval = window.setInterval(() => {
-    state.subscribersCount = group.getSubscribersCount || 0;
-    if (state.subscribersCount) {
-      state.avatarUrl = group.getGroupAvatar;
-      state.groupName = group.getGroupName;
+    if (group.getGroupName && group.getSubscribersCount) {
       state.isUpdated = true;
     } else {
       clearInterval(interval);
@@ -102,39 +98,45 @@ watch(
   () => {
     graph();
     state.chart.yAxis[0].setExtremes(
-      state.subscribersCount - 5,
-      state.subscribersCount + 5
+      group.getSubscribersCount - 5,
+      group.getSubscribersCount + 5
     );
   }
 );
 watch(
-  () => state.subscribersCount,
+  () => group.getSubscribersCount,
   () => {
     if (!!state.chart) {
       state.chart.yAxis[0].setExtremes(
-        state.subscribersCount - 5,
-        state.subscribersCount + 5
+        group.getSubscribersCount - 5,
+        group.getSubscribersCount + 5
       );
     }
   }
 );
-onBeforeUnmount(() => {
-  window.clearInterval(interval);
-});
+watch(
+  () => locale.value,
+  () => {
+    state.chart.yAxis[0].setTitle({ text: state.subscribersText });
+  }
+);
+// onBeforeUnmount(() => {
+//   window.clearInterval(interval);
+// });
 </script>
 
 <template>
   <div class="group">
-    <h2 class="group__name" v-if="state.groupName">
-      {{ state.groupName || "Group" }}
+    <h2 class="group__name" v-if="group.getGroupName">
+      {{ group.getGroupName }}
     </h2>
     <img
       class="group__image"
-      :src="state.avatarUrl"
+      :src="group.getGroupAvatar"
       alt="avatar"
       width="50"
       height="50"
-      v-if="state.avatarUrl.length"
+      v-if="group.getGroupAvatar && group.getGroupAvatar.length"
     />
     <img
       class="group__image"
@@ -152,6 +154,9 @@ onBeforeUnmount(() => {
 @import "@/assets/base.css";
 
 .group {
+  * {
+    caret-color: transparent;
+  }
   display: flex;
   flex-direction: column;
   text-align: center;

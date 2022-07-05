@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 import { useStore } from "@/stores/store";
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const store = useStore();
-const state = reactive({});
+const state = reactive({
+  membersText: computed(() => t("info.members", store.getSubscribersCount)),
+  openedGroupText: computed(() => t("info.opened")),
+  closedGroupText: computed(() => t("info.closed")),
+});
 </script>
 
 <template>
@@ -23,15 +29,17 @@ const state = reactive({});
         v-else
         src="@/assets/images/group-image.svg"
         alt="avatar"
-        width="100"
-        height="100"
+        width="200"
+        height="200"
       />
     </a>
     <div class="info__subscribers" v-if="store.getSubscribersCount">
-      {{ store.getSubscribersCount }} members in the group
+      {{ store.getSubscribersCount }} {{ state.membersText }}
     </div>
     <div class="info__isClosed" v-if="store.getGroupIsClosed">
-      {{ store.getGroupIsClosed ? "The group is Closed" : "The group is Open" }}
+      {{
+        store.getGroupIsClosed ? state.closedGroupText : state.openedGroupText
+      }}
     </div>
     <div class="info__description">{{ store.getGroupDescription }}</div>
   </div>
@@ -43,6 +51,7 @@ const state = reactive({});
   padding: 2rem;
   text-align: center;
   * {
+    caret-color: transparent;
     margin: 1rem;
   }
   &__image {

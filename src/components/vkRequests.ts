@@ -1,9 +1,12 @@
 import fetchJsonp from "fetch-jsonp";
+
 export default async function requestVk(
-  groupID: string | number = "exclusive_muzic",
+  groupID: string | number,
   groupKey: string
 ) {
-  console.log(groupID, groupKey);
+  if (!groupKey) {
+    groupKey = import.meta.env.VITE_GROUP_KEY;
+  }
   try {
     const res = await fetchJsonp(
       `https://api.vk.com/method/groups.getById?group_id=${groupID}&fields=members_count,description&v=5.131&access_token=${groupKey.replace(
@@ -12,13 +15,19 @@ export default async function requestVk(
       )}`,
       { timeout: 7000 }
     );
+    console.log(res);
     if (!!res.ok) {
-      const body = await res.json();
-      return body;
+      try {
+        const body = await res.json();
+        console.log(body);
+        return body;
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
     }
   } catch (err) {
     console.error(err);
     return null;
   }
 }
-//= import.meta.env.VITE_GROUP_KEY

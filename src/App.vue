@@ -33,14 +33,16 @@ const state = reactive({
   display: flex;
   justify-content: space-evenly;
   align-items: stretch;
-  background-color: rgb(233, 233, 233);
+  background-color: rgb(200, 221, 210);
   .navbar {
     display: flex;
     gap: 1rem;
     padding: 1rem;
     &__link {
+      text-align: center;
       text-decoration: none;
       color: black;
+      min-width: 7rem;
     }
     &__link:hover {
       background-color: #ccc;

@@ -3,36 +3,40 @@
     <input
       class="groupForm__input"
       v-model="state.groupID"
-      placeholder="Enter group Id"
+      :placeholder="state.inputIdText"
       required
     />
     <input
       class="groupForm__input"
       v-model="state.accesseKey"
-      placeholder="Enter accesse key"
-      required
+      :placeholder="state.inputKeyText"
     />
-    <button class="groupForm__button" type="submit">search</button>
+    <button class="groupForm__button" type="submit">
+      {{ state.buttonText }}
+    </button>
   </form>
-  <p class="utility-text" v-if="state.isFailed">Не удалось найти группу</p>
+  <p class="utility-text" v-if="state.isFailed">{{ state.utilityText }}</p>
 </template>
 <script lang="ts" setup>
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 import { useStore } from "@/stores/store";
 import router from "@/router/index";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const store = useStore();
 const state = reactive({
   groupID: "",
   accesseKey: "",
   isFailed: false,
+  buttonText: computed(() => t("button.search")),
+  inputIdText: computed(() => t("input.id")),
+  inputKeyText: computed(() => t("input.key")),
+  utilityText: computed(() => t("utility.findFail")),
 });
 store.$subscribe(
   () => {
-    console.log(store.getGroupName);
-    console.log(!!store.getGroupName);
     if (!!store.getGroupName) {
-      console.log("redirect");
       router.push("/subscribers");
     } else {
       state.isFailed = true;
@@ -46,8 +50,7 @@ store.$subscribe(
 
 function submitHandler(event: Event) {
   event.preventDefault();
-  console.log("submit");
-  if (!!state.groupID && !!state.accesseKey) {
+  if (!!state.groupID) {
     store.setGroup(state.groupID, state.accesseKey);
   }
 }
@@ -65,8 +68,12 @@ function submitHandler(event: Event) {
   &__input {
     width: 80%;
     height: 2rem;
+    padding: 0 1rem;
+    border: 1px solid black;
+    border-radius: 3px;
   }
   &__button {
+    caret-color: transparent;
     width: 5rem;
     height: 2rem;
     border: 1px solid black;
@@ -83,6 +90,7 @@ function submitHandler(event: Event) {
   }
 }
 .utility-text {
+  color: rgb(216, 90, 40);
   text-align: center;
 }
 </style>

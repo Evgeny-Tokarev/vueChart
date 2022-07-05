@@ -2,7 +2,7 @@
   <div class="locale">
     <span class="locale__description locale__description_type_ru">Ру</span>
     <label class="locale__switcher">
-      <input type="checkbox" @click="togleLanguage" />
+      <input type="checkbox" @click="togleLanguage" checked />
       <span class="locale__checkbox"></span>
     </label>
     <span class="locale__description locale__description_type_en">En</span>
@@ -20,7 +20,6 @@ function togleLanguage(e: MouseEvent) {
 <style lang="scss" scoped>
 .locale {
   position: relative;
-
   width: 100px;
   display: flex;
   align-items: center;
@@ -30,6 +29,7 @@ function togleLanguage(e: MouseEvent) {
   .locale__description {
     position: absolute;
     top: 50%;
+    color: black;
     transform: translateY(-50%);
   }
   .locale__description_type_ru {
@@ -57,7 +57,7 @@ function togleLanguage(e: MouseEvent) {
       height: 20px;
       width: 40px;
       transition: all 0.5s;
-      border: 1px solid #ccc;
+      border: 1px solid black;
       border-radius: 10px;
     }
     input + .locale__checkbox:after {
@@ -68,7 +68,7 @@ function togleLanguage(e: MouseEvent) {
       height: 12px;
       width: 12px;
       border-radius: 50%;
-      background: #ccc;
+      background: black;
       transition: all 0.2s;
     }
     input:checked + .locale__checkbox:after {
