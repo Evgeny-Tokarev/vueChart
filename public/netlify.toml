@@ -8,5 +8,5 @@
 ## Not needed for static site generators.
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/"
   status = 200
