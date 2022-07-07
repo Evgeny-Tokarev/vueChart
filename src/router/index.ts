@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Information from "@/views/Information.vue";
-import Search from "@/views/Search.vue";
-import Subscribers from "@/views/Subscribers.vue";
-import { useStore } from '@/stores/store'
+import Information from "@/views/InformationVue.vue";
+import Search from "@/views/SearchVue.vue";
+import Subscribers from "@/views/SubscribersVue.vue";
+import { useStore } from "@/stores/store";
 
 const routes = [
   {
@@ -20,16 +20,15 @@ const routes = [
     name: "Subscribers",
     component: Subscribers,
   },
-  
 ];
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
 router.beforeEach((to) => {
-  const store = useStore()
-  if (!store.hasGroup && to.path !== '/') {
-      return '/'
+  const store = useStore();
+  if (!store.hasGroup && to.path !== "/") {
+    return "/";
   }
-})
+});
 export default router;

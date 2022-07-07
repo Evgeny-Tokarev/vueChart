@@ -156,6 +156,7 @@ watch(
 @import "@/assets/base.css";
 
 .group {
+  color: white;
   * {
     caret-color: transparent;
   }

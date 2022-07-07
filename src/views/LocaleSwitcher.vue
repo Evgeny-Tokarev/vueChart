@@ -10,7 +10,7 @@
 </template>
 <script lang="ts" setup>
 import { useI18n } from "vue-i18n";
-const { t, locale } = useI18n();
+const { locale } = useI18n();
 
 function togleLanguage(e: MouseEvent) {
   const target = e.target as HTMLInputElement;

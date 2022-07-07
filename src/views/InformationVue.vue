@@ -50,6 +50,7 @@ const state = reactive({
 .info {
   padding: 2rem;
   text-align: center;
+    color: white;
   * {
     caret-color: transparent;
     margin: 1rem;
