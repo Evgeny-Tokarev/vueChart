@@ -1,5 +1,15 @@
 {
   "files": [],
+  "paths": { "@/*":["./src/*"] },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"] ,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+    },
+    "allowSyntheticDefaultImports": true,
+  },
+
   "references": [
     {
       "path": "./tsconfig.vite-config.json"
