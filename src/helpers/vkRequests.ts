@@ -5,7 +5,7 @@ export default async function requestVk(
   groupKey: string
 ) {
   if (!groupKey) {
-    console.log(import.meta.env.VITE_GROUP_KEY)
+    console.log(import.meta.env.VITE_GROUP_KEY )
     groupKey = import.meta.env.VITE_GROUP_KEY
   }
   try {

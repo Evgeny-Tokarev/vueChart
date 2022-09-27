@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build && echo $CONTEXT > public/netlify-context.txt",
     "test": "jest --watch",
     "preview": "vite preview --port 5050",
     "test:unit": "vitest --environment jsdom",
