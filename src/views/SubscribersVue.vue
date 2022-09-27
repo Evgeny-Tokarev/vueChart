@@ -16,6 +16,7 @@ const state: State = reactive({
 function graph() {
   state.chart = Highcharts.chart({
     chart: {
+      backgroundColor: 'transparent',
       renderTo: "graph",
       type: "spline",
       marginRight: 10,
@@ -42,11 +43,27 @@ function graph() {
     xAxis: {
       type: "datetime",
       tickPixelInterval: 50,
+      labels: {
+        style: {
+          color: '#FFF',
+          fontSize: '16px'
+        }
+      }
     },
 
     yAxis: {
       title: {
         text: state.subscribersText,
+        style :{
+          color: '#FFF',
+          fontSize: '18px'
+        }
+      },
+      labels: {
+        style: {
+          color: '#FFF',
+          fontSize: '16px'
+        }
       },
       tickInterval: 1,
     },
@@ -157,6 +174,7 @@ watch(
 
 .group {
   color: white;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 68.7%);
   * {
     caret-color: transparent;
   }
