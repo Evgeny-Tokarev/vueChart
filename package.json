@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build && echo $CONTEXT",
+    "build": "vue-tsc --noEmit && vite build && echo $VITE_GROUP_KEY",
     "test": "jest --watch",
     "preview": "vite preview --port 5050",
     "test:unit": "vitest --environment jsdom",
