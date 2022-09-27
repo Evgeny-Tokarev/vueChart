@@ -46,7 +46,7 @@ const state = reactive({
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/base.css";
+@import "@/assets/style/base.scss";
 .info {
   padding: 2rem;
   text-align: center;
@@ -56,6 +56,7 @@ const state = reactive({
     margin: 1rem;
   }
   &__image {
+    border-radius: 10px;
     box-shadow: 0px 10px 20px 0px rgba(31, 32, 65, 0.2);
   }
   &__description {

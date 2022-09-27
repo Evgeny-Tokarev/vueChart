@@ -1,23 +1,15 @@
 <template>
   <form class="groupForm" @submit="submitHandler">
-    <input
-      class="groupForm__input"
-      v-model="state.groupID"
-      :placeholder="state.inputIdText"
-      required
-    />
-    <input
-      class="groupForm__input"
-      v-model="state.accesseKey"
-      :placeholder="state.inputKeyText"
-    />
-    <button class="groupForm__button" type="submit">
+    <input class="groupForm__input" v-model="state.groupID" :placeholder="state.inputIdText" required />
+    <input class="groupForm__input" v-model="state.accesseKey" :placeholder="state.inputKeyText" />
+    <Button class="groupForm__button custom-button_type_elevated" @click="submitHandler">
       {{ state.buttonText }}
-    </button>
+    </Button>
   </form>
   <p class="utility-text" v-if="state.isFailed">{{ state.utilityText }}</p>
 </template>
 <script lang="ts" setup>
+import Button from "@/components/reusable/Button.vue"
 import { reactive, computed } from "vue";
 import { useStore } from "@/stores/store";
 import router from "@/router/index";
@@ -48,8 +40,7 @@ store.$subscribe(
   { deep: true }
 );
 
-function submitHandler(event: Event) {
-  event.preventDefault();
+function submitHandler() {
   if (!!state.groupID) {
     store.setGroup(state.groupID, state.accesseKey);
   }
@@ -62,33 +53,24 @@ function submitHandler(event: Event) {
   flex-direction: column;
   width: 80%;
   align-items: center;
-  * {
-    margin-top: 1rem;
-  }
+
+
   &__input {
+    margin: 1rem;
     width: 80%;
     height: 2rem;
     padding: 0 1rem;
     border: 1px solid black;
     border-radius: 3px;
   }
+
   &__button {
+    background: rgb(200, 221, 210);
     caret-color: transparent;
-    width: 5rem;
-    height: 2rem;
-    border: 1px solid black;
-    border-radius: 3px;
-    cursor: pointer;
-    color: black;
-    &:hover {
-      background-color: #ccc;
-    }
-    &:active {
-      background-color: black;
-      color: white;
-    }
+
   }
 }
+
 .utility-text {
   color: rgb(216, 90, 40);
   text-align: center;

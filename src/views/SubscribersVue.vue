@@ -54,7 +54,7 @@ function graph() {
     yAxis: {
       title: {
         text: state.subscribersText,
-        style :{
+        style: {
           color: '#FFF',
           fontSize: '18px'
         }
@@ -78,11 +78,11 @@ function graph() {
     accessibility: {
       enabled: false,
     },
-                plotOptions: {
-                series: {
-                    animation: false
-                }
-            },
+    plotOptions: {
+      series: {
+        animation: false
+      }
+    },
 
     series: [
       {
@@ -149,44 +149,35 @@ watch(
     <h2 class="group__name" v-if="group.getGroupName">
       {{ group.getGroupName }}
     </h2>
-    <img
-      class="group__image"
-      :src="group.getGroupAvatar"
-      alt="avatar"
-      width="50"
-      height="50"
-      v-if="group.getGroupAvatar && group.getGroupAvatar.length"
-    />
-    <img
-      class="group__image"
-      v-else
-      src="@/assets/images/group-image.svg"
-      alt="avatar"
-      width="100"
-      height="100"
-    />
+    <img class="group__image" :src="group.getGroupAvatar" alt="avatar" width="50" height="50"
+      v-if="group.getGroupAvatar && group.getGroupAvatar.length" />
+    <img class="group__image" v-else src="@/assets/images/group-image.svg" alt="avatar" width="100" height="100" />
     <div id="graph"></div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/base.css";
+@import "@/assets/style/base.scss";
 
 .group {
   color: white;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 68.7%);
+  min-height: 100vh;
+
   * {
     caret-color: transparent;
   }
+
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
   gap: 1rem;
   padding: 1rem;
+
   #graph {
     width: 90%;
   }
+
   &__image {
     width: 100px;
     height: 100px;

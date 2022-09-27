@@ -1,5 +1,5 @@
 import { defineStore, type _DeepPartial } from "pinia";
-import requestVk from "@/components/vkRequests";
+import requestVk from "@/helpers/vkRequests";
 
 interface Group {
   [key: string]: any;

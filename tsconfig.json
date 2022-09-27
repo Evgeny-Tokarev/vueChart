@@ -1,19 +1,28 @@
 {
-  "files": [],
-  "paths": { "@/*":["./src/*"] },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"] ,
   "compilerOptions": {
-    "jsx":"preserve",
-    "baseUrl": ".",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": ["esnext", "DOM"],
+    "types": [
+      "vite/client",
+      "@intlify/vite-plugin-vue-i18n/client"
+    ],
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
-    },
-    "allowSyntheticDefaultImports": true,
-  },
-
-  "references": [
-    {
-      "path": "./tsconfig.vite-config.json"
+      "@/*": ["src/*"]
     }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/**/*.config.ts"
   ]
 }

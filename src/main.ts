@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
-import "@/assets/base.css";
+import "@/assets/style/base.scss";
 import { createI18n } from "vue-i18n";
 import messages from "@/locales/locale";
 import router from "@/router/index";
