@@ -4,7 +4,7 @@ const messages = {
       info: "Information",
       reg: "Search",
       subs: "Subscribers",
-      search: "search",
+      search: "Search",
     },
     input: {
       id: "Enter group id",
@@ -27,7 +27,7 @@ const messages = {
       info: "Информация",
       reg: "Поиск",
       subs: "Подписчики",
-      search: "искать",
+      search: "Искать",
     },
     input: {
       id: "Введите идентификатор группы",

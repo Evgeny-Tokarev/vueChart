@@ -5,7 +5,6 @@ export default async function requestVk(
   groupKey: string
 ) {
   if (!groupKey) {
-    console.log(import.meta.env.VITE_GROUP_KEY )
     groupKey = import.meta.env.VITE_GROUP_KEY
   }
   try {
@@ -16,16 +15,13 @@ export default async function requestVk(
       )}`,
       { timeout: 7000 }
     )
-    console.log(res)
     if (!!res.ok) {
       try {
         const body = await res.json()
-        console.log(body)
         return body
       } catch (err) {
         console.error(err)
       }
-    } else {
     }
   } catch (err) {
     console.error(err)

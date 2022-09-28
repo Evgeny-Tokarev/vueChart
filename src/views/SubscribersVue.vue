@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import * as Highcharts from "highcharts";
-import { onMounted, reactive, onBeforeUnmount, watch, computed } from "vue";
+import { onMounted, reactive, watch, computed, onActivated } from "vue";
 import { useStore } from "@/stores/store";
 import { useI18n } from "vue-i18n";
 const { t, locale } = useI18n();
@@ -106,7 +106,11 @@ function graph() {
   });
 }
 let interval: number;
+onActivated(() => {
+  console.log("Subscribers on activated")
+})
 onMounted(() => {
+  console.log("On mounted")
   interval = window.setInterval(() => {
     if (group.getGroupName && group.getSubscribersCount) {
       state.isUpdated = true;

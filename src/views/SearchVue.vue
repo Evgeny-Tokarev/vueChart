@@ -1,36 +1,35 @@
 <template>
   <form class="groupForm" @submit="submitHandler">
-    <input class="groupForm__input" v-model="state.groupID" :placeholder="state.inputIdText" required />
-    <input class="groupForm__input" v-model="state.accesseKey" :placeholder="state.inputKeyText" />
+    <input class="groupForm__input" ref="input1" v-model="state.groupID" :placeholder="$t('input.id')" required />
+    <input class="groupForm__input" v-model="state.accesseKey" :placeholder="$t('input.key')" />
     <Button class="groupForm__button custom-button_type_elevated" @click="submitHandler">
-      {{ state.buttonText }}
+      {{ $t("button.search") }}
     </Button>
   </form>
-  <p class="utility-text" v-if="state.isFailed">{{ state.utilityText }}</p>
+  <p class="utility-text" v-if="state.isFailed">{{ $t("utility.findFail") }}</p>
 </template>
 <script lang="ts" setup>
 import Button from "@/components/reusable/Button.vue"
-import { reactive, computed } from "vue";
+import { onActivated, reactive, ref } from "vue";
 import { useStore } from "@/stores/store";
-import router from "@/router/index";
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
 
 const store = useStore();
+const input1 = ref<HTMLInputElement | null>(null)
+
 const state = reactive({
   groupID: "",
   accesseKey: "",
   isFailed: false,
-  buttonText: computed(() => t("button.search")),
-  inputIdText: computed(() => t("input.id")),
-  inputKeyText: computed(() => t("input.key")),
-  utilityText: computed(() => t("utility.findFail")),
 });
 store.$subscribe(
-  () => {
-    if (!!store.getGroupName) {
-      router.push("/subscribers");
-    } else {
+  (mutation) => {
+    if (checkMutationNewValue(mutation)) store.currentTab = "/"
+    else if (!!store.getGroupName && store.currentTab === "/") {
+      state.isFailed = false;
+      state.groupID = ""
+      state.accesseKey = ""
+      store.currentTab = "subscribers"
+    } else if (store.currentTab === "/") {
       state.isFailed = true;
       setTimeout(() => {
         state.isFailed = false;
@@ -40,11 +39,20 @@ store.$subscribe(
   { deep: true }
 );
 
+function checkMutationNewValue(mutation: any) {
+  return ((Array.isArray(mutation.events) && mutation.events.some((e: any) => e.newValue === "/")
+    || (!Array.isArray(mutation.events) && mutation.events.newValue === "/")))
+}
+
 function submitHandler() {
   if (!!state.groupID) {
     store.setGroup(state.groupID, state.accesseKey);
   }
 }
+
+onActivated(() => {
+  input1.value?.focus()
+})
 </script>
 <style lang="scss" scoped>
 .groupForm {

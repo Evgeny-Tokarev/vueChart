@@ -2,35 +2,41 @@
   <div class="wrapper" :class="state.wrapperClass">
     <div id="menu">
       <nav v-if="store.hasGroup" class="navbar">
-        <router-link class="navbar__link" to="/">{{ state.reg }}</router-link>
-        <router-link class="navbar__link" to="/information">{{
-        state.info
-        }}</router-link>
-        <router-link class="navbar__link" to="/subscribers">{{
-        state.subs
-        }}</router-link>
+        <Button :button-text="$t('button.info')" @click="store.currentTab = 'information'" />
+        <Button :button-text="$t('button.subs')" @click="store.currentTab = 'subscribers'" />
+        <Button :button-text="$t('button.reg')" @click="store.currentTab = '/'" />
       </nav>
       <LocaleSwitcher />
     </div>
-    <router-view></router-view>
+    <KeepAlive>
+      <component :is="tabs[store.currentTab]" />
+    </KeepAlive>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import LocaleSwitcher from "@/views/LocaleSwitcher.vue";
-import { reactive, computed, onMounted, ref } from "vue";
+import Information from "@/views/InformationVue.vue";
+import Search from "@/views/SearchVue.vue";
+import Subscribers from "@/views/SubscribersVue.vue";
+import Button from "@/components/reusable/Button.vue"
+import { reactive, computed } from "vue";
+import type { Component } from 'vue'
 import { useStore } from '@/stores/store'
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router"
 
-const route = useRoute()
 const { t } = useI18n();
 const store = useStore();
+
+const tabs = {
+  "/": Search,
+  "information": Information,
+  "subscribers": Subscribers
+} as { [path: string]: Component }
+
 const state = reactive({
-  info: computed(() => t("button.info")),
-  subs: computed(() => t("button.subs")),
-  reg: computed(() => t("button.reg")),
-  wrapperClass: computed(() => (route.path === "/subscribers" || route.path === "/information") ? "wrapper_dark" : "")
+  wrapperClass: computed(() => (store.currentTab === "subscribers" || store.currentTab === "information") ? "wrapper_dark" : "")
 });
 
 </script>

@@ -1,16 +1,17 @@
-import { defineStore, type _DeepPartial } from "pinia";
-import requestVk from "@/helpers/vkRequests";
+import { defineStore, type _DeepPartial } from "pinia"
+import requestVk from "@/helpers/vkRequests"
 
 interface Group {
-  [key: string]: any;
+  [key: string]: any
 }
 export const useStore = defineStore({
   id: "groupInfo",
   state: () => {
     return {
+      currentTab: "/",
       hasGroup: false,
-      group: {} as Group,
-    };
+      group: {} as Group
+    }
   },
   getters: {
     getSubscribersCount: (state) => state.group.members_count,
@@ -18,30 +19,30 @@ export const useStore = defineStore({
     getGroupAvatar: (state) => state.group.photo_200,
     getGroupIsClosed: (state) => state.group.is_closed,
     getGroupDescription: (state) => state.group.description,
-    getGroupUrl: (state) => `https://vk.com/${state.group.screen_name}`,
+    getGroupUrl: (state) => `https://vk.com/${state.group.screen_name}`
   },
   actions: {
     setGroup(groupID: string, groupPassword: string) {
-      let tries = 1;
+      let tries = 1
       let interval = window.setInterval(() => {
         requestVk(groupID, groupPassword).then((groups) => {
           if (groups && groups.response) {
-            this.$reset();
+            this.$reset()
             this.$patch({
               hasGroup: true,
-              group: groups.response[0],
-            });
-        
-            window.clearInterval(interval);
+              group: groups.response[0]
+            })
+
+            window.clearInterval(interval)
           } else {
-            tries++;
+            tries++
             if (tries >= 5) {
-              this.$reset();
-              window.clearInterval(interval);
+              this.$reset()
+              window.clearInterval(interval)
             }
           }
-        });
-      }, 1000);
-    },
-  },
-});
+        })
+      }, 1000)
+    }
+  }
+})
