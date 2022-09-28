@@ -1,3 +1,15 @@
+<template>
+  <div class="group">
+    <h1 class="group__name" v-if="store.getGroupName">
+      {{ store.getGroupName }}
+    </h1>
+    <img class="group__image" :src="store.getGroupAvatar" alt="avatar" width="50" height="50"
+      v-if="store.getGroupAvatar && store.getGroupAvatar.length" />
+    <img class="group__image" v-else src="@/assets/images/group-image.svg" alt="avatar" width="100" height="100" />
+    <div id="graph"></div>
+  </div>
+</template>
+
 <script lang="ts" setup>
 import * as Highcharts from "highcharts";
 import { onMounted, reactive, watch, computed, onActivated } from "vue";
@@ -8,7 +20,7 @@ const { t, locale } = useI18n();
 interface State {
   [key: string]: any;
 }
-const group = useStore();
+const store = useStore();
 const state: State = reactive({
   isUpdated: false,
   subscribersText: computed(() => t("chart.subs")),
@@ -25,7 +37,7 @@ function graph() {
           var series = this.series[0];
           setInterval(function () {
             var x = new Date().getTime(),
-              y = group.getSubscribersCount;
+              y = store.getSubscribersCount;
             series.addPoint([x, y], true, true);
           }, 1000);
         },
@@ -96,7 +108,7 @@ function graph() {
           for (i = -19; i <= 0; i += 1) {
             data.push({
               x: time + i * 1000,
-              y: group.getSubscribersCount,
+              y: store.getSubscribersCount,
             });
           }
           return data;
@@ -106,13 +118,10 @@ function graph() {
   });
 }
 let interval: number;
-onActivated(() => {
-  console.log("Subscribers on activated")
-})
+
 onMounted(() => {
-  console.log("On mounted")
   interval = window.setInterval(() => {
-    if (group.getGroupName && group.getSubscribersCount) {
+    if (store.getGroupName && store.getSubscribersCount) {
       state.isUpdated = true;
     } else {
       clearInterval(interval);
@@ -124,18 +133,18 @@ watch(
   () => {
     graph();
     state.chart.yAxis[0].setExtremes(
-      group.getSubscribersCount - 5,
-      group.getSubscribersCount + 5
+      store.getSubscribersCount - 5,
+      store.getSubscribersCount + 5
     );
   }
 );
 watch(
-  () => group.getSubscribersCount,
+  () => store.getSubscribersCount,
   () => {
     if (!!state.chart) {
       state.chart.yAxis[0].setExtremes(
-        group.getSubscribersCount - 5,
-        group.getSubscribersCount + 5
+        store.getSubscribersCount - 5,
+        store.getSubscribersCount + 5
       );
     }
   }
@@ -147,18 +156,6 @@ watch(
   }
 );
 </script>
-
-<template>
-  <div class="group">
-    <h2 class="group__name" v-if="group.getGroupName">
-      {{ group.getGroupName }}
-    </h2>
-    <img class="group__image" :src="group.getGroupAvatar" alt="avatar" width="50" height="50"
-      v-if="group.getGroupAvatar && group.getGroupAvatar.length" />
-    <img class="group__image" v-else src="@/assets/images/group-image.svg" alt="avatar" width="100" height="100" />
-    <div id="graph"></div>
-  </div>
-</template>
 
 <style lang="scss" scoped>
 @import "@/assets/style/base.scss";

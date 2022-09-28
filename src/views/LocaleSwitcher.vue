@@ -2,7 +2,7 @@
   <div class="locale">
     <span class="locale__description locale__description_type_ru">Ру</span>
     <label class="locale__switcher">
-      <input type="checkbox" @click="$i18n.locale === 'ru' ? $i18n.locale = 'en' : $i18n.locale = 'ru'" checked />
+      <input type="checkbox" @click="$i18n.locale = $i18n.locale === 'ru' ? 'en' : 'ru'" checked />
       <span class="locale__checkbox"></span>
     </label>
     <span class="locale__description locale__description_type_en">En</span>

@@ -1,12 +1,15 @@
 <template>
   <div class="wrapper" :class="state.wrapperClass">
-    <div id="menu">
+    <div class="menu">
       <nav v-if="store.hasGroup" class="navbar">
-        <Button :button-text="$t('button.info')" @click="store.currentTab = 'information'" />
-        <Button :button-text="$t('button.subs')" @click="store.currentTab = 'subscribers'" />
-        <Button :button-text="$t('button.reg')" @click="store.currentTab = '/'" />
+        <Button class="custom-button_type_elevated menu-button" :button-text="$t('button.info')"
+          @click="store.currentTab = 'information'" />
+        <Button class="custom-button_type_elevated menu-button" :button-text="$t('button.subs')"
+          @click="store.currentTab = 'subscribers'" />
+        <Button class="custom-button_type_elevated menu-button" :button-text="$t('button.reg')"
+          @click="store.currentTab = '/'" />
       </nav>
-      <LocaleSwitcher />
+      <LocaleSwitcher class="locale-switcher" />
     </div>
     <KeepAlive>
       <component :is="tabs[store.currentTab]" />
@@ -46,33 +49,29 @@ const state = reactive({
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 68.7%);
 }
 
-#menu {
+.menu {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  padding: 0 10%;
   align-items: stretch;
-  min-height: 4rem;
+  min-height: 5rem;
   background-color: rgb(200, 221, 210);
+  position: relative;
+  z-index: 0;
 
   .navbar {
     display: flex;
     gap: 1rem;
     padding: 1rem;
+  }
 
-    .navbar__link {
-      text-align: center;
-      text-decoration: none;
-      color: black;
-      min-width: 7rem;
-    }
+  .menu-button {
+    background: #FFF;
+    caret-color: transparent;
+  }
 
-    .navbar__link:hover {
-      background-color: #ccc;
-    }
-
-    .navbar__link:active {
-      background-color: black;
-      color: white;
-    }
+  .locale-switcher {
+    margin-left: auto;
   }
 }
 </style>

@@ -67,7 +67,7 @@ function clickHandler(e: MouseEvent | TouchEvent) {
 .custom-button_type_elevated::after {
     content: '';
     position: absolute;
-    width: 70%;
+    width: 80%;
     height: 70%;
     left: 15%;
     bottom: -10px;
@@ -88,7 +88,7 @@ function clickHandler(e: MouseEvent | TouchEvent) {
 .custom-button_type_elevated:active {
     box-shadow: none;
     margin-top: 3px;
-    margin-bottom : -3px;
+    margin-bottom: -3px;
     transition: all 0.2s;
 }
 
