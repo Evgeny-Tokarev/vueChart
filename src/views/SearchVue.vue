@@ -29,6 +29,7 @@ const state = reactive({
 });
 store.$subscribe(
   (mutation) => {
+    console.log(mutation)
     if (checkMutationNewValue(mutation)) store.currentTab = "/"
     else if (!!store.getGroupName && store.currentTab === "/") {
       state.isFailed = false;
