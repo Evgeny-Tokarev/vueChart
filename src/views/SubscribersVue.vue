@@ -1,5 +1,5 @@
 <template>
-  <div class="group">
+  <div class="group container">
     <h1 class="group__name" v-if="store.getGroupName">
       {{ store.getGroupName }}
     </h1>
@@ -12,10 +12,14 @@
 
 <script lang="ts" setup>
 import * as Highcharts from "highcharts";
-import { onMounted, reactive, watch, computed, onActivated } from "vue";
+import { onMounted, reactive, watch, computed, onActivated, onDeactivated } from "vue";
 import { useStore } from "@/stores/store";
 import { useI18n } from "vue-i18n";
+import { getWidth } from "@/composables/resizeController"
+
+const width = getWidth();
 const { t, locale } = useI18n();
+
 
 interface State {
   [key: string]: any;
@@ -24,18 +28,20 @@ const store = useStore();
 const state: State = reactive({
   isUpdated: false,
   subscribersText: computed(() => t("chart.subs")),
+  chart: null
 });
-function graph() {
+const graph = function () {
   state.chart = Highcharts.chart({
     chart: {
       backgroundColor: 'transparent',
+      spacingLeft: 0,
+      marginRight: 5,
       renderTo: "graph",
       type: "spline",
-      marginRight: 10,
       events: {
         load: function () {
-          var series = this.series[0];
-          setInterval(function () {
+          const series = this.series[0];
+          setInterval(() => {
             var x = new Date().getTime(),
               y = store.getSubscribersCount;
             series.addPoint([x, y], true, true);
@@ -58,7 +64,7 @@ function graph() {
       labels: {
         style: {
           color: '#FFF',
-          fontSize: '16px'
+          fontSize: width.value >= 800 ? '16px' : '12px'
         }
       }
     },
@@ -68,13 +74,13 @@ function graph() {
         text: state.subscribersText,
         style: {
           color: '#FFF',
-          fontSize: '18px'
+          fontSize: width.value >= 800 ? '18px' : '14px'
         }
       },
       labels: {
         style: {
           color: '#FFF',
-          fontSize: '16px'
+          fontSize: width.value >= 800 ? '16px' : '12px'
         }
       },
       tickInterval: 1,
@@ -101,11 +107,11 @@ function graph() {
         name: "Subscribers",
         type: "spline",
         data: (function () {
-          var data = [],
-            time = new Date().getTime(),
+          const data = []
+          let time = new Date().getTime(),
             i;
 
-          for (i = -19; i <= 0; i += 1) {
+          for (i = width.value >= 800 ? -9 : -4; i <= 0; i += 1) {
             data.push({
               x: time + i * 1000,
               y: store.getSubscribersCount,
@@ -114,34 +120,64 @@ function graph() {
           return data;
         })(),
       },
-    ],
+    ]
   });
 }
-let interval: number;
 
 onMounted(() => {
+  let interval: number;
+  let counter = 0;
   interval = window.setInterval(() => {
     if (store.getGroupName && store.getSubscribersCount) {
       state.isUpdated = true;
     } else {
-      clearInterval(interval);
+      counter++
+      if (counter > 5) clearInterval(interval);
     }
   }, 1000);
 });
+onActivated(() => {
+  state.deactivated = false
+})
+onDeactivated(() => {
+  state.deactivated = true
+})
+watch(() => width.value,
+  () => {
+    if (!state.deactivated && state.chart) {
+      state.chart.series[0].setData((function () {
+        const data = []
+        let time = new Date().getTime(),
+          i;
+
+        for (i = width.value >= 800 ? -9 : -4; i <= 0; i += 1) {
+          data.push({
+            x: time + i * 1000,
+            y: store.getSubscribersCount,
+          });
+        }
+        return data;
+      })())
+      state.chart.redraw();
+    }
+  })
+
 watch(
   () => state.isUpdated,
   () => {
-    graph();
-    state.chart.yAxis[0].setExtremes(
-      store.getSubscribersCount - 5,
-      store.getSubscribersCount + 5
-    );
+    if (state.isUpdated) {
+      graph();
+      state.chart.yAxis[0].setExtremes(
+        store.getSubscribersCount - 5,
+        store.getSubscribersCount + 5
+      );
+    }
   }
 );
 watch(
   () => store.getSubscribersCount,
   () => {
-    if (!!state.chart) {
+    if (state.chart) {
       state.chart.yAxis[0].setExtremes(
         store.getSubscribersCount - 5,
         store.getSubscribersCount + 5
@@ -163,20 +199,15 @@ watch(
 .group {
   color: white;
   min-height: 100vh;
-
-  * {
-    caret-color: transparent;
-  }
-
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
+  padding-top: 1rem;
 
   #graph {
-    width: 90%;
+    width: 100%;
   }
 
   &__image {

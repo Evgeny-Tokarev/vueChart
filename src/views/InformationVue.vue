@@ -1,5 +1,5 @@
 <template>
-  <div class="info">
+  <div class="info container">
     <h2 class="info__title">{{ store.getGroupName }}</h2>
     <a :href="store.getGroupUrl" target="_blank">
       <img class="info__image" :src="store.getGroupAvatar" alt="avatar" width="200" height="200"
@@ -29,14 +29,14 @@ const store = useStore();
 @import "@/assets/style/base.scss";
 
 .info {
-  padding: 2rem;
+  padding: 2rem 0;
   text-align: center;
   color: white;
 
   * {
-    caret-color: transparent;
-    margin: 1rem;
+    margin: 1rem auto;
   }
+
 
   &__image {
     border-radius: 10px;

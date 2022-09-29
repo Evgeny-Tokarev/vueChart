@@ -1,13 +1,17 @@
 <template>
   <div class="wrapper" :class="state.wrapperClass">
     <div class="menu">
-      <nav v-if="store.hasGroup" class="navbar">
+      <Button v-if="width < 800 && store.hasGroup && !state.showMenu" class="custom-button_type_elevated burger-button"
+        @click="state.showMenu = true">
+        <div class="burger-icon"></div>
+      </Button>
+      <nav v-if="store.hasGroup" class="navbar" :class="state.showMenu ? '': 'navbar_hidden'">
         <Button class="custom-button_type_elevated menu-button" :button-text="$t('button.info')"
-          @click="store.currentTab = 'information'" />
+          @click="goToPage('information')" />
         <Button class="custom-button_type_elevated menu-button" :button-text="$t('button.subs')"
-          @click="store.currentTab = 'subscribers'" />
+          @click="goToPage('subscribers')" />
         <Button class="custom-button_type_elevated menu-button" :button-text="$t('button.reg')"
-          @click="store.currentTab = '/'" />
+          @click="goToPage('/')" />
       </nav>
       <LocaleSwitcher class="locale-switcher" />
     </div>
@@ -27,11 +31,12 @@ import Button from "@/components/reusable/Button.vue"
 import { reactive, computed } from "vue";
 import type { Component } from 'vue'
 import { useStore } from '@/stores/store'
-import { useI18n } from "vue-i18n";
+import { useI18n } from "vue-i18n"
+import { getWidth } from "@/composables/resizeController"
 
 const { t } = useI18n();
 const store = useStore();
-
+const width = getWidth();
 const tabs = {
   "/": Search,
   "information": Information,
@@ -39,8 +44,13 @@ const tabs = {
 } as { [path: string]: Component }
 
 const state = reactive({
+  showMenu: false,
   wrapperClass: computed(() => (store.currentTab === "subscribers" || store.currentTab === "information") ? "wrapper_dark" : "")
 });
+function goToPage(page: string) {
+  store.currentTab = page;
+  state.showMenu = false;
+}
 
 </script>
 
@@ -52,7 +62,7 @@ const state = reactive({
 .menu {
   display: flex;
   justify-content: space-between;
-  padding: 0 10%;
+  padding: 0 2.5%;
   align-items: stretch;
   min-height: 5rem;
   background-color: rgb(200, 221, 210);
@@ -60,9 +70,15 @@ const state = reactive({
   z-index: 0;
 
   .navbar {
+    position: absolute;
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     padding: 1rem;
+  }
+
+  .navbar_hidden {
+    display: none;
   }
 
   .menu-button {
@@ -70,8 +86,43 @@ const state = reactive({
     caret-color: transparent;
   }
 
+  .burger-button {
+    align-self: center;
+  }
+
+  .burger-icon {
+    position: relative;
+    width: 30px;
+    height: 20px;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+  }
+
+  .burger-icon::before {
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    top: calc(50% - 1px);
+    height: 2px;
+    background-color: black;
+  }
+
   .locale-switcher {
     margin-left: auto;
+  }
+
+  @media screen and (min-width: 800px) {
+    padding: 0 10%;
+
+    .navbar {
+      position: static;
+      flex-direction: row;
+    }
+
+    .navbar_hidden {
+      display: flex;
+    }
   }
 }
 </style>
