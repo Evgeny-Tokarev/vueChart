@@ -46,6 +46,7 @@ store.$subscribe(
 );
 
 function checkMutationNewValue(mutation: any) {
+  console.log(mutation.events)
   return ((Array.isArray(mutation.events) && mutation.events.some((e: any) => e.newValue === "/")
     || (!Array.isArray(mutation.events) && mutation.events.newValue === "/")))
 }
