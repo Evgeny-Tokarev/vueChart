@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import LocaleSwitcher from "@/views/LocaleSwitcher.vue";
+import LocaleSwitcher from "@/components/reusable/LocaleSwitcher.vue";
 import Information from "@/views/InformationVue.vue";
 import Search from "@/views/SearchVue.vue";
 import Subscribers from "@/views/SubscribersVue.vue";
@@ -57,6 +57,7 @@ function goToPage(page: string) {
 <style lang="scss" scoped>
 .wrapper_dark {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 68.7%);
+  min-height: 100vh;
 }
 
 .menu {
