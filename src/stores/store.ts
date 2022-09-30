@@ -10,12 +10,14 @@ export const useStore = defineStore({
     return {
       currentTab: "/",
       hasGroup: false,
-      group: {} as Group
+      hasFailed: false,
+      group: {} as Group,
+      warningMessage: ""
     }
   },
   getters: {
     getSubscribersCount: (state) => state.group.members_count,
-    getGroupName: (state) => state.group.name,
+    getGroupName: (state) => state.group.name || null,
     getGroupAvatar: (state) => state.group.photo_200,
     getGroupIsClosed: (state) => state.group.is_closed,
     getGroupDescription: (state) => state.group.description,
@@ -24,25 +26,36 @@ export const useStore = defineStore({
   actions: {
     setGroup(groupID: string, groupPassword: string) {
       let tries = 1
-      let interval = window.setInterval(() => {
-        requestVk(groupID, groupPassword).then((groups) => {
-          if (groups && groups.response) {
-            this.$reset()
-            this.$patch({
-              hasGroup: true,
-              group: groups.response[0]
-            })
-
-            window.clearInterval(interval)
-          } else {
-            tries++
-            if (tries >= 5) {
+      return new Promise((res) => {
+        let interval = window.setInterval(() => {
+          requestVk(groupID, groupPassword).then((groups) => {
+            if (groups && groups.response) {
               this.$reset()
+              this.$patch({
+                hasGroup: true,
+                group: groups.response[0],
+                warningMessage: groups.response[0].hasOwnProperty("deactivated")
+                  ? "warningMessage"
+                  : "",
+                currentTab: "subscribers"
+              })
               window.clearInterval(interval)
+              res(true)
+            } else {
+              tries++
+              if (tries >= 5) {
+                if (!this.hasGroup) this.$reset()
+                window.clearInterval(interval)
+                this.hasFailed = true
+                setTimeout(() => {
+                  this.hasFailed = false
+                }, 3000)
+              }
+              res(false)
             }
-          }
-        })
-      }, 1000)
+          })
+        }, 1000)
+      })
     }
   }
 })

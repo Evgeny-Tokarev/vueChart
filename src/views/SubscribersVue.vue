@@ -6,7 +6,9 @@
     <img class="group__image" :src="store.getGroupAvatar" alt="avatar" width="50" height="50"
       v-if="store.getGroupAvatar && store.getGroupAvatar.length" />
     <img class="group__image" v-else src="@/assets/images/group-image.svg" alt="avatar" width="100" height="100" />
-    <div id="graph"></div>
+    {{store.getGroupName}}
+    <h2 v-if="store.warningMessage.length">{{$t(`utility.${store.warningMessage}`)}}</h2>
+    <div id="graph" v-else></div>
   </div>
 </template>
 
@@ -26,9 +28,10 @@ interface State {
 }
 const store = useStore();
 const state: State = reactive({
-  isUpdated: false,
+  groupName: "",
   subscribersText: computed(() => t("chart.subs")),
-  chart: null
+  chart: null,
+  interval: null
 });
 const graph = function () {
   state.chart = Highcharts.chart({
@@ -41,7 +44,7 @@ const graph = function () {
       events: {
         load: function () {
           const series = this.series[0];
-          setInterval(() => {
+          state.interval = window.setInterval(() => {
             var x = new Date().getTime(),
               y = store.getSubscribersCount;
             series.addPoint([x, y], true, true);
@@ -128,28 +131,38 @@ onMounted(() => {
   let interval: number;
   let counter = 0;
   interval = window.setInterval(() => {
-    if (store.getGroupName && store.getSubscribersCount) {
-      state.isUpdated = true;
-    } else {
-      counter++
+    if (!store.getGroupName) {
       if (counter > 5) clearInterval(interval);
     }
   }, 1000);
 });
 onActivated(() => {
   state.deactivated = false
+  if (store.getGroupName !== state.groupName) {
+    if (state.interval) window.clearInterval(state.interval)
+    if (state.chart) state.chart = null
+    state.groupName = store.getGroupName
+    if (store.hasGroup && !store.warningMessage.length) {
+      graph();
+      state.chart.yAxis[0].setExtremes(
+        store.getSubscribersCount - 5,
+        store.getSubscribersCount + 5
+      );
+    }
+  }
 })
 onDeactivated(() => {
   state.deactivated = true
 })
+
 watch(() => width.value,
   () => {
     if (!state.deactivated && state.chart) {
+      console.log("width triggered")
       state.chart.series[0].setData((function () {
         const data = []
         let time = new Date().getTime(),
           i;
-
         for (i = width.value >= 800 ? -9 : -4; i <= 0; i += 1) {
           data.push({
             x: time + i * 1000,
@@ -162,18 +175,6 @@ watch(() => width.value,
     }
   })
 
-watch(
-  () => state.isUpdated,
-  () => {
-    if (state.isUpdated) {
-      graph();
-      state.chart.yAxis[0].setExtremes(
-        store.getSubscribersCount - 5,
-        store.getSubscribersCount + 5
-      );
-    }
-  }
-);
 watch(
   () => store.getSubscribersCount,
   () => {
@@ -188,7 +189,7 @@ watch(
 watch(
   () => locale.value,
   () => {
-    state.chart.yAxis[0].setTitle({ text: state.subscribersText });
+    if (state.chart) state.chart.yAxis[0].setTitle({ text: state.subscribersText });
   }
 );
 </script>

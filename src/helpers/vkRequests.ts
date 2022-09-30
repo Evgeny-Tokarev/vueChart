@@ -22,7 +22,7 @@ export default async function requestVk(
       } catch (err) {
         console.error(err)
       }
-    }
+    } else console.log("Res isn't ok", res)
   } catch (err) {
     console.error(err)
     return null

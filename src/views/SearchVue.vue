@@ -12,7 +12,7 @@
       {{ $t("button.search") }}
     </Button>
   </form>
-  <p class="utility-text" v-if="state.isFailed">{{ $t("utility.findFail") }}</p>
+  <p class="utility-text" v-if="store.hasFailed">{{ $t("utility.findFail") }}</p>
 </template>
 <script lang="ts" setup>
 import Button from "@/components/reusable/Button.vue"
@@ -24,37 +24,15 @@ const input1 = ref<HTMLInputElement | null>(null)
 
 const state = reactive({
   groupID: "",
-  accesseKey: "",
-  isFailed: false,
+  accesseKey: ""
 });
-store.$subscribe(
-  (mutation) => {
-    console.log(mutation)
-    if (checkMutationNewValue(mutation)) store.currentTab = "/"
-    else if (!!store.getGroupName && store.currentTab === "/") {
-      state.isFailed = false;
-      state.groupID = ""
-      state.accesseKey = ""
-      store.currentTab = "subscribers"
-    } else if (store.currentTab === "/") {
-      state.isFailed = true;
-      setTimeout(() => {
-        state.isFailed = false;
-      }, 3000);
-    }
-  },
-  { deep: true }
-);
 
-function checkMutationNewValue(mutation: any) {
-  console.log(mutation.events)
-  return ((Array.isArray(mutation.events) && mutation.events.some((e: any) => e.newValue === "/")
-    || (!Array.isArray(mutation.events) && mutation.events.newValue === "/")))
-}
 
-function submitHandler() {
+async function submitHandler() {
   if (!!state.groupID) {
-    store.setGroup(state.groupID, state.accesseKey);
+    if (await store.setGroup(state.groupID, state.accesseKey) && input1.value) {
+      input1.value.value = ""
+    }
   }
 }
 
