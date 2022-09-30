@@ -45,6 +45,7 @@ const graph = function () {
         load: function () {
           const series = this.series[0];
           state.interval = window.setInterval(() => {
+            store.updateGroup()
             var x = new Date().getTime(),
               y = store.getSubscribersCount;
             series.addPoint([x, y], true, true);
@@ -158,7 +159,6 @@ onDeactivated(() => {
 watch(() => width.value,
   () => {
     if (!state.deactivated && state.chart) {
-      console.log("width triggered")
       state.chart.series[0].setData((function () {
         const data = []
         let time = new Date().getTime(),

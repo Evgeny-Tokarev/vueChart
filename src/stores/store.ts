@@ -11,6 +11,8 @@ export const useStore = defineStore({
       currentTab: "/",
       hasGroup: false,
       hasFailed: false,
+      name: "",
+      password: "",
       group: {} as Group,
       warningMessage: ""
     }
@@ -24,6 +26,15 @@ export const useStore = defineStore({
     getGroupUrl: (state) => `https://vk.com/${state.group.screen_name}`
   },
   actions: {
+    updateGroup() {
+      requestVk(this.name, this.password).then((groups) => {
+        if (groups && groups.response) {
+          this.$patch({
+            group: groups.response[0]
+          })
+        }
+      })
+    },
     setGroup(groupID: string, groupPassword: string) {
       let tries = 1
       return new Promise((res) => {
@@ -33,6 +44,8 @@ export const useStore = defineStore({
               this.$reset()
               this.$patch({
                 hasGroup: true,
+                name: groupID,
+                password: groupPassword,
                 group: groups.response[0],
                 warningMessage: groups.response[0].hasOwnProperty("deactivated")
                   ? "warningMessage"
