@@ -1,5 +1,5 @@
 <template>
-    <button class="custom-button" ref="button" @click="clickHandler">
+    <button class="custom-button" ref="button" @click="clickHandler" :active="props.active || false">
         <slot> {{ props.buttonText }}</slot>
     </button>
 </template>
@@ -11,7 +11,8 @@ const button = ref<HTMLButtonElement | null>(null);
 defineExpose({ button });
 
 interface Props {
-    buttonText?: string;
+    buttonText?: string,
+    active?: boolean
 }
 
 const emit = defineEmits<{
@@ -72,29 +73,31 @@ function clickHandler(e: MouseEvent | TouchEvent) {
     left: 15%;
     bottom: -10px;
     z-index: -1;
-    background: black;
+    background: var(--text-color);
     opacity: 0.7;
-    filter: blur(9px);
+    filter: blur(8px);
     border-radius: 10px;
     transition: all 0.2s;
 
 }
 
-.custom-button_type_elevated:active::after {
-    bottom: 0;
+.custom-button_type_elevated:active::after,
+.custom-button_active.custom-button_type_elevated::after {
+    bottom: 5px;
     transition: all 0.2s;
 }
 
-.custom-button_type_elevated:active {
+.custom-button_type_elevated:active,
+.custom-button_active.custom-button_type_elevated {
     box-shadow: none;
-    margin-top: 3px;
-    margin-bottom: -3px;
+    margin-top: 4px;
+    margin-bottom: -4px;
     transition: all 0.2s;
 }
 
 @media screen and (min-width: 600px) {
     .custom-button_type_transparent {
-        color: #FFFFFF;
+        color: var(--text-color);
     }
 }
 </style>

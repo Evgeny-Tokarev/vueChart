@@ -8,7 +8,8 @@ export const useStore = defineStore({
   id: "groupInfo",
   state: () => {
     return {
-      currentTab: "/",
+      theme: "dark",
+      currentTab: "introduction",
       hasGroup: false,
       hasFailed: false,
       name: "",
@@ -41,7 +42,7 @@ export const useStore = defineStore({
         let interval = window.setInterval(() => {
           requestVk(groupID, groupPassword).then((groups) => {
             if (groups && groups.response) {
-              this.$reset()
+              // this.$reset()
               this.$patch({
                 hasGroup: true,
                 name: groupID,

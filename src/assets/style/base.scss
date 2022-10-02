@@ -1,5 +1,26 @@
 @import "./mixins.scss";
+:root,
+:root.light {
+  --bg-color: #fff;
+  --text-color: #000;
+  --primary: rgb(200, 221, 210);
+  --primary-reverse: #404642;
+  --varning-text: rgb(117, 0, 0);
+  --overlay-gradient: rgba(255, 255, 255, 0.3);
+}
 
+:root.dark {
+  --bg-color: #000;
+  --text-color: #fff;
+  --primary: #404642;
+  --primary-reverse: rgb(200, 221, 210);
+  --varning-text: #ee0c04;
+  --overlay-gradient: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.8) 68.7%
+  );
+}
 *,
 *::before,
 *::after {

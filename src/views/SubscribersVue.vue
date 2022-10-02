@@ -3,10 +3,11 @@
     <h1 class="group__name" v-if="store.getGroupName">
       {{ store.getGroupName }}
     </h1>
-    <img class="group__image" :src="store.getGroupAvatar" alt="avatar" width="50" height="50"
-      v-if="store.getGroupAvatar && store.getGroupAvatar.length" />
-    <img class="group__image" v-else src="@/assets/images/group-image.svg" alt="avatar" width="100" height="100" />
-    {{store.getGroupName}}
+    <a :href="store.getGroupUrl" target="_blank">
+      <img class="group__image" :src="store.getGroupAvatar" alt="avatar" width="50" height="50"
+        v-if="store.getGroupAvatar && store.getGroupAvatar.length" />
+      <img class="group__image" v-else src="@/assets/images/group-image.svg" alt="avatar" width="100" height="100" />
+    </a>
     <h2 v-if="store.warningMessage.length">{{$t(`utility.${store.warningMessage}`)}}</h2>
     <div id="graph" v-else></div>
   </div>
@@ -65,25 +66,29 @@ const graph = function () {
     xAxis: {
       type: "datetime",
       tickPixelInterval: 50,
+      lineColor: 'var(--text-color)',
+      gridLineColor: "var(--text-color)",
       labels: {
         style: {
-          color: '#FFF',
+          color: 'var(--text-color)',
           fontSize: width.value >= 800 ? '16px' : '12px'
         }
       }
     },
 
     yAxis: {
+      lineColor: 'var(--text-color)',
+      gridLineColor: "var(--text-color)",
       title: {
         text: state.subscribersText,
         style: {
-          color: '#FFF',
+          color: 'var(--text-color)',
           fontSize: width.value >= 800 ? '18px' : '14px'
         }
       },
       labels: {
         style: {
-          color: '#FFF',
+          color: 'var(--text-color)',
           fontSize: width.value >= 800 ? '16px' : '12px'
         }
       },
@@ -110,6 +115,8 @@ const graph = function () {
       {
         name: "Subscribers",
         type: "spline",
+        color: "var(--primary-reverse)",
+        className: "series",
         data: (function () {
           const data = []
           let time = new Date().getTime(),
@@ -187,6 +194,17 @@ watch(
   }
 );
 watch(
+  () => store.theme,
+  () => {
+    if (state.chart) {
+      state.chart.yAxis[0].setExtremes(
+        store.getSubscribersCount - 5,
+        store.getSubscribersCount + 5
+      );
+    }
+  }
+);
+watch(
   () => locale.value,
   () => {
     if (state.chart) state.chart.yAxis[0].setTitle({ text: state.subscribersText });
@@ -197,9 +215,12 @@ watch(
 <style lang="scss" scoped>
 @import "@/assets/style/base.scss";
 
+:deep(.series) {
+  color: yellowgreen;
+}
+
 .group {
-  color: white;
-  min-height: 100vh;
+  color: var(--text-color);
   display: flex;
   flex-direction: column;
   text-align: center;

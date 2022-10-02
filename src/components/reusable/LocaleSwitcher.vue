@@ -24,7 +24,7 @@
   .locale__description {
     position: absolute;
     top: 50%;
-    color: black;
+    color: var(--text-color);
     transform: translateY(-50%);
   }
 
@@ -57,7 +57,7 @@
       height: 20px;
       width: 40px;
       transition: all 0.5s;
-      border: 1px solid black;
+      border: 1px solid var(--text-color);
       border-radius: 10px;
     }
 
@@ -69,7 +69,7 @@
       height: 12px;
       width: 12px;
       border-radius: 50%;
-      background: black;
+      background: var(--text-color);
       transition: all 0.2s;
     }
 

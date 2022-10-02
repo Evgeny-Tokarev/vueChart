@@ -31,7 +31,7 @@ const store = useStore();
 .info {
   padding: 2rem 0;
   text-align: center;
-  color: white;
+  color: var(--text-color);
 
   * {
     margin: 1rem auto;

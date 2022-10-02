@@ -1,5 +1,9 @@
 const messages = {
   en: {
+    introduction: {
+      title: "Review VK social network group statistics and information",
+      button: "Got it"
+    },
     button: {
       info: "Information",
       reg: "Search",
@@ -7,11 +11,12 @@ const messages = {
       search: "Search"
     },
     input: {
-      id: "Enter group id",
-      key: "Enter group key"
+      id: "Enter group name",
+      key: "Enter group key",
+      tooltip: "Enter group name in English"
     },
     utility: {
-      findFail: "Wrong group name or group key",
+      noGroup: "No group with this name",
       warningMessage: "The group was deactivated"
     },
     info: {
@@ -24,6 +29,10 @@ const messages = {
     }
   },
   ru: {
+    introduction: {
+      title: "Просмотр статистики и информации групп соцсети ВК",
+      button: "Понятно"
+    },
     button: {
       info: "Информация",
       reg: "Поиск",
@@ -31,11 +40,12 @@ const messages = {
       search: "Искать"
     },
     input: {
-      id: "Введите идентификатор группы",
-      key: "Введите пароль"
+      id: "Введите название группы",
+      key: "Введите пароль",
+      tooltip: "Введите название группы латиницей"
     },
     utility: {
-      findFail: "Неправильный идентификатор группы или пароль",
+      noGroup: "Группа с таким названием не найдена",
       warningMessage: "Группа была деактивирована"
     },
     info: {
