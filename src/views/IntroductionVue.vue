@@ -32,6 +32,7 @@ const store = useStore()
         color: var(--text-color);
         background: var(--primary);
         caret-color: transparent;
+        margin-bottom: 2rem;
     }
 }
 </style>

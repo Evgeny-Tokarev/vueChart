@@ -82,19 +82,20 @@ function closeMenu() {
     .menu-button {
         background: var(--bg-color);
         color: var(--text-color);
-        caret-color: transparent;
     }
 
     .burger-button {
         align-self: center;
+        background-color: var(--bg-color);
+        color: var(--text-color);
     }
 
     .burger-icon {
         position: relative;
         width: 30px;
         height: 20px;
-        border-top: 2px solid black;
-        border-bottom: 2px solid black;
+        border-top: 2px solid var(--text-color);
+        border-bottom: 2px solid var(--text-color);
     }
 
     .burger-icon::before {
@@ -104,7 +105,7 @@ function closeMenu() {
         right: 0;
         top: calc(50% - 1px);
         height: 2px;
-        background-color: black;
+        background-color: var(--text-color);
     }
 
     .locale-switcher {
@@ -118,6 +119,7 @@ function closeMenu() {
         align-self: center;
         padding: 5px;
         margin-left: 10px;
+        background-color: var(--bg-color);
     }
 
     .theme-icon {

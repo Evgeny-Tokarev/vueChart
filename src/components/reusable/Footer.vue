@@ -21,7 +21,10 @@ const store = useStore()
     padding: 1rem 0;
     background-color: var(--primary);
     gap: 1rem;
-    margin-top: 2rem;
+
+    h2 {
+        @include text-700-20-100;
+    }
 
     a {
         text-decoration: none;

@@ -51,7 +51,7 @@ async function submitHandler() {
     if (await store.setGroup(state.groupID, state.accesseKey) && input1.value) {
       state.groupID = ""
     }
-  } else if (!input1.value) {
+  } else {
     state.emptyError = true
     window.setTimeout(() => {
       state.emptyError = false
