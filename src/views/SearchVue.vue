@@ -47,12 +47,11 @@ const state: State = reactive({
 
 
 async function submitHandler() {
-  console.log(state.groupID)
   if (!!state.groupID) {
     if (await store.setGroup(state.groupID, state.accesseKey) && input1.value) {
       state.groupID = ""
     }
-  } else {
+  } else if (!input1.value) {
     state.emptyError = true
     window.setTimeout(() => {
       state.emptyError = false
@@ -125,12 +124,23 @@ onActivated(() => {
     position: absolute;
     top: -120%;
     color: var(--text-color);
-    border: 1px solid var(--text-color);
-    border-radius: 3px;
+    border-radius: 10px;
     background-color: var(--primary);
     padding: 0.5rem 1rem;
   }
 
+  .tooltip:after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    bottom: -12px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 12px solid var(--primary);
+
+  }
 
   &__button {
     background: var(--primary);

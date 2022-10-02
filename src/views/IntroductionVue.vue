@@ -1,6 +1,7 @@
 <template>
     <div class="introduction container">
         <h1>{{$t("introduction.title")}}</h1>
+        <p>{{$t('introduction.description')}}</p>
         <Button class="custom-button_type_elevated introduction-button" :button-text="$t('introduction.button')"
             @click="store.currentTab='/'" />
     </div>
@@ -17,6 +18,15 @@ const store = useStore()
 .introduction {
     color: var(--text-color);
     padding-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    text-align: center;
+
+    p {
+        text-align: justify;
+    }
 
     &-button {
         color: var(--text-color);

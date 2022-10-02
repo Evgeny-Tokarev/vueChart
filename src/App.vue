@@ -4,7 +4,7 @@
     <KeepAlive>
       <component :is="tabs[store.currentTab]" />
     </KeepAlive>
-
+    <Footer />
   </div>
 </template>
 
@@ -17,6 +17,7 @@ import Search from "@/views/SearchVue.vue";
 import Subscribers from "@/views/SubscribersVue.vue";
 import { useStore } from '@/stores/store'
 import Header from "@/components/reusable/Header.vue"
+import Footer from "@/components/reusable/Footer.vue"
 
 const store = useStore();
 

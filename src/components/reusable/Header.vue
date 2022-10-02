@@ -1,10 +1,11 @@
 <template>
     <div class="menu">
-        <Button v-if="width < 800 && store.hasGroup && !state.showMenu"
-            class="custom-button_type_elevated burger-button" @click="state.showMenu = true">
+        <Button v-show="width < 800 && store.hasGroup && !state.showMenu"
+            class="custom-button_type_elevated burger-button" @click="showMenu">
             <div class="burger-icon"></div>
         </Button>
-        <nav v-if="store.hasGroup" class="navbar" :class="state.showMenu ? '': 'navbar_hidden'">
+        <nav v-if="store.hasGroup" class="navbar" :class="state.showMenu ? '': 'navbar_hidden'"
+            v-click-outside="closeMenu">
             <Button class="custom-button_type_elevated menu-button" :button-text="$t('button.info')"
                 :class="store.currentTab === 'information' ? 'custom-button_active': ''"
                 @click="goToPage('information')" />
@@ -21,7 +22,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { reactive, computed, onMounted } from "vue";
+import { reactive, computed, onMounted, ref } from "vue";
 import { useStore } from '@/stores/store'
 import Button from "@/components/reusable/Button.vue"
 import LocaleSwitcher from "@/components/reusable/LocaleSwitcher.vue"
@@ -31,7 +32,6 @@ import { getWidth } from "@/composables/resizeController"
 
 const store = useStore();
 const width = getWidth()
-
 const state = reactive({
     showMenu: false,
     wrapperClass: computed(() => store.currentTab === "/" ? "" : "wrapper_dark")
@@ -46,6 +46,12 @@ onMounted(() => {
 const setTheme = (theme: string) => {
     document.documentElement.className = theme
     store.theme = theme === 'dark' ? 'light' : 'dark'
+}
+function showMenu() {
+    window.setTimeout(() => { state.showMenu = true }, 0)
+}
+function closeMenu() {
+    if (state.showMenu) state.showMenu = false
 }
 </script>
 <style lang="scss" scoped>
