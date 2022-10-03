@@ -9,10 +9,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "DOM"],
-    "types": [
-      "vite/client",
-      "@intlify/vite-plugin-vue-i18n/client"
-    ],
+    "types": ["jest", "vite/client", "@intlify/vite-plugin-vue-i18n/client"],
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
@@ -23,6 +20,8 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "src/**/*.config.ts"
+    "src/**/*.config.ts",
+    "src/components/reusable/Button.test.js",
+    "src/components/reusable/Button.test.js"
   ]
 }
