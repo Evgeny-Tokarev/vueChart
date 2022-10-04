@@ -226,7 +226,7 @@ watch(
   text-align: center;
   align-items: center;
   gap: 1rem;
-  padding-top: 1rem;
+  padding: 1rem 0;
 
   #graph {
     width: 100%;

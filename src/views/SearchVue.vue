@@ -86,7 +86,7 @@ onActivated(() => {
   }
 
   &__input {
-    width: 250px;
+    width: 280px;
     height: 3rem;
     padding: 0 1rem;
     outline: none;

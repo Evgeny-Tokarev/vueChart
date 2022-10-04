@@ -9,7 +9,15 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "DOM"],
-    "types": ["jest", "vite/client", "@intlify/vite-plugin-vue-i18n/client"],
+    "types": [
+      "node",
+      "jsdom",
+      "jest",
+      "vite/client",
+      "@intlify/vite-plugin-vue-i18n/client",
+      "@testing-library/jest-dom",
+      "@types/testing-library__jest-dom"
+    ],
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
@@ -20,8 +28,10 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
+    "src/*.vue",
     "src/**/*.config.ts",
-    "src/components/reusable/Button.test.js",
-    "src/components/reusable/Button.test.js"
-  ]
+    "src/**/*.test.ts",
+    "src/components/reusable/LocaleSwitcher.test.js"
+  ],
+  "exclude": ["node_modules"]
 }
